@@ -20,6 +20,9 @@ const AddItem = () => {
       price: price,
       quantity: quantity,
       name: name,
+      studentDonating: "",
+    }).then(() => {
+      navigate("/teacher");
     });
   };
 

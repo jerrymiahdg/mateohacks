@@ -1,8 +1,72 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import expandIcon from "../assets/expand_icon.png";
+import {
+  query,
+  collection,
+  doc,
+  getDocs,
+  where,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../firebase";
+import { Context } from "../App";
 
 const TeacherItem = (props) => {
   const [open, setOpen] = useState(false);
+  const [items, setItems] = useState([]);
+
+  const ctx = useContext(Context);
+
+  const fetchItems = () => {
+    const docs = query(
+      collection(db, "items"),
+      where("requestedBy", "==", props.id),
+      where("studentDonating", "in", ["", ctx.user.uid])
+    );
+    const items = getDocs(docs).then((e) => {
+      console.log(e);
+      setItems(() => {
+        const result = [];
+        e.forEach((doc) => {
+          result.push({
+            name: doc.data().name,
+            price: doc.data().price,
+            id: doc.id,
+            quantity: doc.data().quantity,
+            studentDonating: doc.data().studentDonating,
+          });
+        });
+        return result;
+      });
+    });
+  };
+
+  //   const donateItem = (id) => () => {
+  //     setDoc(doc(db, "items", id), {
+  //       studentDonating: ctx.user.uid,
+  //     });
+  //   };
+
+  const donateItem = (id, studentDonating) => () => {
+    if (studentDonating) {
+      updateDoc(doc(db, "items", id), {
+        studentDonating: "",
+      }).then(() => {
+        fetchItems();
+      });
+    } else {
+      updateDoc(doc(db, "items", id), {
+        studentDonating: ctx.user.uid,
+      }).then(() => {
+        fetchItems();
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
 
   return (
     <div className="border border-neutral-800 w-full p-5 flex flex-col">
@@ -12,10 +76,13 @@ const TeacherItem = (props) => {
           <p className="text-neutral-500">{props.room}</p>
         </div>
         <div className="flex gap-5">
-          <p>{props.items.length}</p>
+          <p>{items.length}</p>
           <button
             onClick={() => setOpen((open) => !open)}
-            className={`material-symbols-outlined ${open ? "rotate-180" : ""}`}
+            className={`material-symbols-outlined disabled:text-neutral-800 ${
+              open ? "rotate-180" : ""
+            }`}
+            disabled={items.length == 0}
           >
             expand_more
           </button>
@@ -23,16 +90,27 @@ const TeacherItem = (props) => {
       </div>
       <div
         className={`max-h-0 h-full overflow-hidden flex gap-5 transition-all ${
-          open && "max-h-16 mt-5"
+          open && "max-h-56 mt-5"
         }`}
       >
-        {props.items &&
-          props.items.map((item) => (
-            <div className="bg-neutral-800 rounded-lg p-5">
+        {items &&
+          items.map((item) => (
+            <div className="p-5 w-40 bg-neutral-900 rounded-md flex flex-col gap-2">
               <div>{item.name}</div>
-              <div className="text-sm text-center text-neutral-600">
-                {item.quantity}
+              <div className="flex justify-between text-sm">
+                <div className="text-neutral-600">{item.quantity}</div>
+                <div className="text-neutral-500 italic">${item.price}</div>
               </div>
+              <button
+                className={`w-full rounded-md text-xs py-2 ${
+                  item.studentDonating
+                    ? "bg-neutral-600 hover:bg-neutral-500"
+                    : "bg-emerald-600 hover:bg-emerald-500"
+                }`}
+                onClick={donateItem(item.id, item.studentDonating)}
+              >
+                {item.studentDonating ? "Remove donation" : "I want to donate!"}
+              </button>
             </div>
           ))}
       </div>
