@@ -9,6 +9,8 @@ import {
   query,
   collection,
   deleteDoc,
+  updateDoc,
+  increment,
 } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -91,6 +93,7 @@ const Teacher = () => {
             id: doc.id,
             first: doc.data().first,
             last: doc.data().last,
+            donateCount: doc.data().donateCount,
           });
         });
         return result;
@@ -100,12 +103,21 @@ const Teacher = () => {
 
   const confirmDonation = (id) => () => {
     const item = items.filter((item) => item.id == id)[0];
+
+    updateDoc(doc(db, "users", item.studentDonating), {
+      donateCount: increment(item.quantityDonating),
+    });
     // increase student prop donated by 1
     const difference = item.quantity - item.quantityDonating;
-    if (item.difference <= 0) {
+    if (difference <= 0) {
       //check if no items left
       removeItem(id);
     } else {
+      updateDoc(doc(db, "items", id), {
+        studentDonating: "",
+        quanity: difference,
+        quantityDonating: 0,
+      });
     }
   };
 
@@ -195,7 +207,7 @@ const Teacher = () => {
                       </h1>
                       <div className="flex justify-between gap-5 items-center">
                         <h1 className="text-sm">Donated</h1>
-                        <h1 className="text-xl">25</h1>
+                        <h1 className="text-xl">{student.donateCount}</h1>
                       </div>
                     </div>
                     <div className="flex flex-col">

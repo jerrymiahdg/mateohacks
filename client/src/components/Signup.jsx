@@ -42,6 +42,7 @@ const Signup = () => {
           first: firstName,
           last: lastName,
           teacher: isTeacher,
+          donateCount: 0,
           room: roomNumber,
         });
 
