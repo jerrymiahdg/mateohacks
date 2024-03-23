@@ -174,34 +174,49 @@ const Teacher = () => {
           <div className="w-full flex gap-2 flex-col">
             <h1>Students</h1>
             <div className="flex flex-col border-x border-t w-full border-neutral-800">
-              {students.map((student) => (
-                <div className="flex justify-between items-center border-b border-neutral-800 p-5">
-                  <div className="flex-col gap-5">
-                    <h1 className="text-xl font-bold">
-                      {student.first} {student.last[0].toUpperCase()}.
-                    </h1>
-                    <div className="flex justify-between gap-5 items-center">
-                      <h1 className="text-sm">Donated</h1>
-                      <h1 className="text-xl">25</h1>
+              {students
+                .filter(
+                  (student) =>
+                    items.filter((item) => item.studentDonating == student.id)
+                      .length > 0
+                )
+                .map((student) => (
+                  <div className="flex justify-between items-center border-b border-neutral-800 p-5">
+                    <div className="flex-col gap-5">
+                      <h1 className="text-xl font-bold">
+                        {student.first} {student.last[0].toUpperCase()}.
+                      </h1>
+                      <div className="flex justify-between gap-5 items-center">
+                        <h1 className="text-sm">Donated</h1>
+                        <h1 className="text-xl">25</h1>
+                      </div>
+                    </div>
+                    <div className="flex flex-col">
+                      {items
+                        .filter((item) => item.studentDonating == student.id)
+                        .map((item, i, arr) => (
+                          <div
+                            className={`flex flex-col gap-2 items-center ${
+                              i !== arr.length - 1 && "border-b"
+                            } border-neutral-800 p-5`}
+                          >
+                            <h1 className="text-green-200">
+                              Wants to donate {item.name}!
+                            </h1>
+                            <button className="bg-neutral-900 p-1 text-sm rounded-sm opacity-90 hover:opacity-100 w-full">
+                              Confirm
+                            </button>
+                          </div>
+                        ))}
                     </div>
                   </div>
-                  <div className="flex flex-col">
-                    {items
-                      .filter((item) => item.studentDonating == student.id)
-                      .map(() => (
-                        <div className="flex flex-col gap-2 items-center border-b border-neutral-800 p-5">
-                          <h1 className="text-green-200">
-                            Wants to donate tissues!
-                          </h1>
-                          <button className="bg-neutral-900 p-1 text-sm rounded-sm opacity-90 hover:opacity-100 w-full">
-                            Confirm
-                          </button>
-                        </div>
-                      ))}
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
+            {students.filter(
+              (student) =>
+                items.filter((item) => item.studentDonating == student.id)
+                  .length > 0
+            ).length <= 0 && <h1>No students currently donating 😢</h1>}
           </div>
         </div>
       </div>

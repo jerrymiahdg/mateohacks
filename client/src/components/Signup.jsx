@@ -118,12 +118,14 @@ const Signup = () => {
             {isTeacher ? "teacher" : "student"}
           </button>
         </h1>
-        <button
-          type="submit"
-          className="p-2 bg-neutral-700 hover:bg-neutral-500 transition-all"
-        >
-          Signup
-        </button>
+        <div className="flex justify-center">
+          <button
+            type="submit"
+            className="transition ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300"
+          >
+            Signup
+          </button>
+        </div>
         {errorMsg && <h1 className="text-red-300">{errorMsg}</h1>}
         <h1 className="text-center">
           Already a member?{" "}
