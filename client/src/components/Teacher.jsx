@@ -8,6 +8,7 @@ import {
   where,
   query,
   collection,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -63,6 +64,7 @@ const Teacher = () => {
             price: doc.data().price,
             id: doc.id,
             quantity: doc.data().quantity,
+            quantityDonating: doc.data().quantityDonating || 0,
           });
         });
         return result;
@@ -96,14 +98,19 @@ const Teacher = () => {
     });
   };
 
-  const confirmDonation = () => {
+  const confirmDonation = (id) => () => {
+    const item = items.filter((item) => item.id == id)[0];
     // increase student prop donated by 1
-    removeItem();
-    return;
+    const difference = item.quantity - item.quantityDonating;
+    if (item.difference <= 0) {
+      //check if no items left
+      removeItem(id);
+    } else {
+    }
   };
 
-  const removeItem = () => {
-    return;
+  const removeItem = (e) => {
+    deleteDoc(doc(db, "items", e)).then(() => fetchItems());
   };
 
   useEffect(() => {
@@ -149,7 +156,7 @@ const Teacher = () => {
                         <h1 className="text-xl">{item.price}</h1>
                       </div>
                     </div>
-                    <button>
+                    <button onClick={() => removeItem(item.id)}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         height="24"
@@ -201,9 +208,13 @@ const Teacher = () => {
                             } border-neutral-800 p-5`}
                           >
                             <h1 className="text-green-200">
-                              Wants to donate {item.name}!
+                              Wants to donate {item.quantityDonating}{" "}
+                              {item.name}!
                             </h1>
-                            <button className="bg-neutral-900 p-1 text-sm rounded-sm opacity-90 hover:opacity-100 w-full">
+                            <button
+                              className="bg-neutral-900 p-1 text-sm rounded-sm opacity-90 hover:opacity-100 w-full"
+                              onClick={confirmDonation(item.id)}
+                            >
                               Confirm
                             </button>
                           </div>

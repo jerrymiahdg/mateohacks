@@ -69,7 +69,7 @@ const Signup = () => {
         onSubmit={authSignUp}
       >
         <div className="text-center pb-5">
-          <h1 className="text-5xl">Signup</h1>
+          <h1 className="text-5xl">Sign Up</h1>
         </div>
         <input
           className="p-2 bg-neutral-800"
@@ -122,7 +122,7 @@ const Signup = () => {
           type="submit"
           className="transition ease-in-out delay-150 bg-blue-500/75 hover:bg-blue-500/100 duration-300 py-3 px-6 rounded-lg"
         >
-          Signup
+          Sign Up
         </button>
         {errorMsg && <h1 className="text-red-300">{errorMsg}</h1>}
         <h1 className="text-center">

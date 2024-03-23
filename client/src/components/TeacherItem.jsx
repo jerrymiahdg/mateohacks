@@ -35,7 +35,8 @@ const TeacherItem = (props) => {
             id: doc.id,
             quantity: doc.data().quantity,
             studentDonating: doc.data().studentDonating,
-            quantityInput: 0,
+            quantityInput: 1,
+            quantityDonating: doc.data().quantityDonating,
           });
         });
         return result;
@@ -53,14 +54,15 @@ const TeacherItem = (props) => {
     if (studentDonating) {
       updateDoc(doc(db, "items", id), {
         studentDonating: "",
-        quantityDonating: e,
+        quantityDonating: 0,
       }).then(() => {
         fetchItems();
       });
     } else {
+      const item = items.filter((item) => item.id == id)[0];
       updateDoc(doc(db, "items", id), {
         studentDonating: ctx.user.uid,
-        quantityDonating: 0,
+        quantityDonating: item.quantityInput,
       }).then(() => {
         fetchItems();
       });
@@ -100,11 +102,39 @@ const TeacherItem = (props) => {
           items.map((item) => (
             <div className="p-5 w-40 bg-neutral-900 rounded-md flex flex-col gap-2">
               <div>{item.name}</div>
-              <div className="flex justify-between text-sm">
-                <div className="text-neutral-600">{item.quantity}</div>
+              <div className="flex flex-col gap-1 justify-between text-sm">
+                <div className="text-neutral-600">
+                  Requesting {item.quantity}
+                </div>
                 <div className="text-neutral-500 italic">${item.price}</div>
               </div>
-              <input type="number" className="p-1" value={item.quantityInput} />
+              {item.studentDonating == ctx.user.uid && (
+                <div className="p-1">
+                  <h1 className="text-sm italic text-center">
+                    Donating {item.quantityDonating}
+                  </h1>
+                </div>
+              )}
+              {!item.studentDonating && (
+                <input
+                  type="number"
+                  className="p-1 bg-neutral-800"
+                  value={item.quantityInput}
+                  min={1}
+                  max={item.quantity}
+                  onChange={(e) =>
+                    setItems((prev) => {
+                      const copy = [...prev];
+                      copy.forEach((el) => {
+                        if (el.id == item.id) {
+                          el.quantityInput = e.target.value;
+                        }
+                      });
+                      return copy;
+                    })
+                  }
+                />
+              )}
               <button
                 className={`w-full rounded-md text-xs py-2 ${
                   item.studentDonating

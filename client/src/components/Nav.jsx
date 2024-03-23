@@ -29,7 +29,7 @@ const Nav = () => {
           {!ctx.user && (
             <>
               <Link to="login">Login</Link>
-              <Link to="signup">Signup</Link>
+              <Link to="signup">Sign Up</Link>
             </>
           )}
           {ctx.user && (
