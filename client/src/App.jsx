@@ -8,7 +8,9 @@ import Nav from "./components/Nav";
 import Signup from "./components/Signup";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
-import Home from "./components/Home";
+import Student from "./components/Student";
+import Teacher from "./components/Teacher";
+import AddItem from "./components/AddItem";
 
 export const Context = createContext();
 
@@ -26,9 +28,11 @@ function App() {
       <Context.Provider value={{ user: user, setUser: setUser }}>
         <Nav />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Student />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/teacher" element={<Teacher />} />
+          <Route path="/add-item" element={<AddItem />} />
         </Routes>
       </Context.Provider>
     </>
