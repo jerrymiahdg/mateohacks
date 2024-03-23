@@ -35,6 +35,7 @@ const TeacherItem = (props) => {
             id: doc.id,
             quantity: doc.data().quantity,
             studentDonating: doc.data().studentDonating,
+            quantityInput: 0,
           });
         });
         return result;
@@ -48,16 +49,18 @@ const TeacherItem = (props) => {
   //     });
   //   };
 
-  const donateItem = (id, studentDonating) => () => {
+  const donateItem = (id, studentDonating) => (e) => {
     if (studentDonating) {
       updateDoc(doc(db, "items", id), {
         studentDonating: "",
+        quantityDonating: e,
       }).then(() => {
         fetchItems();
       });
     } else {
       updateDoc(doc(db, "items", id), {
         studentDonating: ctx.user.uid,
+        quantityDonating: 0,
       }).then(() => {
         fetchItems();
       });
@@ -101,6 +104,7 @@ const TeacherItem = (props) => {
                 <div className="text-neutral-600">{item.quantity}</div>
                 <div className="text-neutral-500 italic">${item.price}</div>
               </div>
+              <input type="number" className="p-1" value={item.quantityInput} />
               <button
                 className={`w-full rounded-md text-xs py-2 ${
                   item.studentDonating
