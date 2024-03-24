@@ -136,7 +136,7 @@ const Teacher = () => {
         <div className="flex w-full justify-center">
           <div className="flex flex-col max-w-5xl w-full px-5 py-10 gap-10">
             <div className="flex flex-col gap-2">
-              <h1 className="text-5xl">Good afternoon, {name}!</h1>
+              <h1 className="text-5xl">Hello, {name}!</h1>
               <h1 className="text-neutral-500">{room}</h1>
             </div>
             <div className="flex flex-col md:flex-row w-full gap-5">
@@ -183,7 +183,9 @@ const Teacher = () => {
                 <h1>Students</h1>
                 <div className="flex flex-col border-x border-t w-full border-neutral-800">
                   {students
-                    .filter((student) => items.filter(
+                    .filter(
+                      (student) =>
+                        items.filter(
                           (item) => item.studentDonating == student.id
                         ).length > 0
                     )

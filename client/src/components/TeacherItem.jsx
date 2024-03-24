@@ -37,6 +37,7 @@ const TeacherItem = (props) => {
             studentDonating: doc.data().studentDonating,
             quantityInput: 1,
             quantityDonating: doc.data().quantityDonating,
+            errorMsg: "",
           });
         });
         return result;
@@ -66,6 +67,16 @@ const TeacherItem = (props) => {
           quantityDonating: Number(item.quantityInput),
         }).then(() => {
           fetchItems();
+        });
+      } else {
+        setItems((prev) => {
+          const copy = [...prev];
+          copy.forEach((item) => {
+            if (item.id === id) {
+              item.errorMsg = `Please choose a number between 1 and ${item.quantity}.`;
+            }
+          });
+          return copy;
         });
       }
     }
@@ -97,7 +108,7 @@ const TeacherItem = (props) => {
       </div>
       <div
         className={`max-h-0 h-full overflow-hidden flex gap-5 transition-all ${
-          open && "max-h-56 mt-5"
+          open && " max-h-96 mt-5"
         }`}
       >
         {items &&
@@ -136,6 +147,9 @@ const TeacherItem = (props) => {
                     })
                   }
                 />
+              )}
+              {item.errorMsg && (
+                <h1 className="text-red-300 text-sm">{item.errorMsg}</h1>
               )}
               <button
                 className={`w-full rounded-md text-xs py-2 ${
