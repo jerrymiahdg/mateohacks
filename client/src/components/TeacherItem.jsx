@@ -60,12 +60,14 @@ const TeacherItem = (props) => {
       });
     } else {
       const item = items.filter((item) => item.id == id)[0];
-      updateDoc(doc(db, "items", id), {
-        studentDonating: ctx.user.uid,
-        quantityDonating: Number(item.quantityInput),
-      }).then(() => {
-        fetchItems();
-      });
+      if (item.quantityInput >= 1 && item.quantityInput <= item.quantity) {
+        updateDoc(doc(db, "items", id), {
+          studentDonating: ctx.user.uid,
+          quantityDonating: Number(item.quantityInput),
+        }).then(() => {
+          fetchItems();
+        });
+      }
     }
   };
 
