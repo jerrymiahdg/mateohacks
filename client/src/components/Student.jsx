@@ -109,7 +109,9 @@ const Student = () => {
                     item.requestedBy == teacher.id && !item.studentDonating
                 ).length > 0
             ).length == 0 && (
-              <div>No teachers requesting items at this time! 🎉</div>
+              <div className="border-t border-neutral-800 pt-5">
+                No teachers are requesting items at this time! 🎉
+              </div>
             )}
           </div>
         </div>

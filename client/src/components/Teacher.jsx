@@ -127,6 +127,11 @@ const Teacher = () => {
           }
         });
       }
+
+      setInterval(() => {
+        fetchItems();
+        fetchStudents();
+      }, 5000);
     });
   }, []);
 

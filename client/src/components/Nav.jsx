@@ -22,7 +22,8 @@ const Nav = () => {
   return (
     <div className="flex w-full justify-center border-b border-neutral-800">
       <div className="flex w-full max-w-5xl justify-between gap-10 p-5 items-center">
-        <Link to="/" className="font-bold text-4xl">
+        <Link to="/" className="font-bold text-4xl flex gap-5 items-center">
+          <span class="material-symbols-outlined text-4xl">school</span>
           HelpYourTeacher.com
         </Link>
         <div className="flex gap-10">
