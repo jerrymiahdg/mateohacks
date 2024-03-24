@@ -85,7 +85,7 @@ const Student = () => {
       {nameSet && (
         <div className="flex w-full justify-center">
           <div className="max-w-5xl w-full px-5 py-10 flex flex-col gap-5">
-            <div className="text-4xl">Hello, {name}</div>
+            <div className="text-4xl">Hello, {name}!</div>
             {teachers
               .filter(
                 (teacher) =>
