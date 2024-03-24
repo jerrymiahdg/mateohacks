@@ -11,7 +11,7 @@ const AddItem = () => {
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [quantity, setQuantity] = useState(0);
 
   const addItem = (e) => {
     e.preventDefault();
@@ -21,6 +21,7 @@ const AddItem = () => {
       quantity: quantity,
       name: name,
       studentDonating: "",
+      quantityDonating: 0,
     }).then(() => {
       navigate("/teacher");
     });
@@ -49,13 +50,16 @@ const AddItem = () => {
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />
-        <input
-          className="p-2 bg-neutral-800"
-          type="number"
-          placeholder="Quantity"
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
-        />
+        <div>
+          <h1>Quantity</h1>
+          <input
+            className="p-2 bg-neutral-800"
+            type="number"
+            placeholder="Quantity"
+            value={quantity}
+            onChange={(e) => setQuantity(Number(e.target.value))}
+          />
+        </div>
         <button
           type="submit"
           className="p-2 bg-neutral-700 hover:bg-neutral-500 transition-all"

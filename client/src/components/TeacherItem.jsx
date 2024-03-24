@@ -25,7 +25,7 @@ const TeacherItem = (props) => {
       where("studentDonating", "in", ["", ctx.user.uid])
     );
     const items = getDocs(docs).then((e) => {
-      console.log(e);
+      console.log("PRINTING: " + e);
       setItems(() => {
         const result = [];
         e.forEach((doc) => {
@@ -62,7 +62,7 @@ const TeacherItem = (props) => {
       const item = items.filter((item) => item.id == id)[0];
       updateDoc(doc(db, "items", id), {
         studentDonating: ctx.user.uid,
-        quantityDonating: item.quantityInput,
+        quantityDonating: Number(item.quantityInput),
       }).then(() => {
         fetchItems();
       });
