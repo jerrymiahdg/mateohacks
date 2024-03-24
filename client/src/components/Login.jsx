@@ -21,6 +21,7 @@ const Login = () => {
   const authSignIn = (e) => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
+        console.log(userCredential);
         onAuthStateChanged(auth, (user) => {
           ctx.setUser(user);
           navigate("/");
@@ -38,10 +39,7 @@ const Login = () => {
             setErrorMsg("Incorrect password");
             break;
           case undefined:
-            onAuthStateChanged(auth, (user) => {
-              ctx.setUser(user);
-              navigate("/");
-            });
+            authSignIn();
         }
       });
   };
