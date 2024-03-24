@@ -49,6 +49,7 @@ const Student = () => {
         e.forEach((doc) => {
           result.push({
             requestedBy: doc.data().requestedBy,
+            studentDonating: doc.data().studentDonating,
           });
         });
         console.log(result);
@@ -89,8 +90,10 @@ const Student = () => {
             {teachers
               .filter(
                 (teacher) =>
-                  items.filter((item) => item.requestedBy == teacher.id)
-                    .length > 0
+                  items.filter(
+                    (item) =>
+                      item.requestedBy == teacher.id && !item.studentDonating
+                  ).length > 0
               )
               .map((teacher) => (
                 <TeacherItem
@@ -99,6 +102,15 @@ const Student = () => {
                   id={teacher.id}
                 />
               ))}
+            {teachers.filter(
+              (teacher) =>
+                items.filter(
+                  (item) =>
+                    item.requestedBy == teacher.id && !item.studentDonating
+                ).length > 0
+            ).length == 0 && (
+              <div>No teachers requesting items at this time! 🎉</div>
+            )}
           </div>
         </div>
       )}
