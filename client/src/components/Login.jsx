@@ -10,6 +10,7 @@ const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     if (ctx.user) {
@@ -33,10 +34,10 @@ const Login = () => {
         console.log(errorCode);
         switch (errorCode) {
           case "auth/user-not-found":
-            alert("No account found with email.");
+            setErrorMsg("No account found with email.");
             break;
           case "auth/wrong-password":
-            alert("Incorrect password");
+            setErrorMsg("Incorrect password");
             break;
         }
       });
@@ -71,6 +72,7 @@ const Login = () => {
         >
           Login
         </button>
+        {errorMsg && <h1 className="text-red-300">{errorMsg}</h1>}
         <h1 className="text-center">
           Not a member?{" "}
           <Link to="/signup" className="text-blue-300">
