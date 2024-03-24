@@ -29,27 +29,29 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const authSignUp = (e) => {
+    e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         onAuthStateChanged(auth, (user) => {
-          // const user = userCredential.user;
           setDoc(doc(db, "users", user.uid), {
             first: firstName,
             last: lastName,
             teacher: isTeacher,
             donateCount: 0,
             room: roomNumber,
-          }).then((res) => {
-            console.log(user);
-            ctx.setUser(user);
-            navigate("/");
-          });
+          })
+            .then((res) => {
+              ctx.setUser(user);
+              navigate("/");
+            })
+            .catch((err) => console.log(err));
         });
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode);
+        console.log(errorMessage);
         switch (errorCode) {
           case "auth/email-already-in-use":
             setErrorMsg("Email is already in use.");
@@ -57,6 +59,21 @@ const Signup = () => {
           case "auth/weak-password":
             setErrorMsg("Please create a password 6 characters or greater.");
             break;
+          case undefined:
+            onAuthStateChanged(auth, (user) => {
+              setDoc(doc(db, "users", user.uid), {
+                first: firstName,
+                last: lastName,
+                teacher: isTeacher,
+                donateCount: 0,
+                room: roomNumber,
+              })
+                .then((res) => {
+                  ctx.setUser(user);
+                  navigate("/");
+                })
+                .catch((err) => console.log(err));
+            });
         }
       });
   };

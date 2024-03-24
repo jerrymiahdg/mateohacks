@@ -21,12 +21,10 @@ const Login = () => {
   const authSignIn = (e) => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        const user = userCredential.user;
         onAuthStateChanged(auth, (user) => {
           ctx.setUser(user);
           navigate("/");
         });
-        console.log(user);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -39,6 +37,11 @@ const Login = () => {
           case "auth/wrong-password":
             setErrorMsg("Incorrect password");
             break;
+          case undefined:
+            onAuthStateChanged(auth, (user) => {
+              ctx.setUser(user);
+              navigate("/");
+            });
         }
       });
   };
