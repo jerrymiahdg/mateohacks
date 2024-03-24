@@ -32,21 +32,19 @@ const Signup = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         onAuthStateChanged(auth, (user) => {
-          ctx.setUser(user);
-          navigate("/");
+          // const user = userCredential.user;
+          setDoc(doc(db, "users", user.uid), {
+            first: firstName,
+            last: lastName,
+            teacher: isTeacher,
+            donateCount: 0,
+            room: roomNumber,
+          }).then((res) => {
+            console.log(user);
+            ctx.setUser(user);
+            navigate("/");
+          });
         });
-
-        const user = userCredential.user;
-
-        setDoc(doc(db, "users", user.uid), {
-          first: firstName,
-          last: lastName,
-          teacher: isTeacher,
-          donateCount: 0,
-          room: roomNumber,
-        });
-
-        console.log(user);
       })
       .catch((error) => {
         const errorCode = error.code;
